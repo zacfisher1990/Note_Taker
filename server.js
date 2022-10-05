@@ -1,15 +1,18 @@
+// dependencies
 const express = require('express');
 const path =require('path');
-//const termData = require('./terms.json');
 const fs = require('fs');
-const PORT = process.env.PORT || 3001;
 
+//express app
+const PORT = process.env.PORT || 3001;
 const app = express();
 
+// middleware for parsing JSON and urlencoed form data
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// POST request
 app.post('/api/notes', (req, res) => {
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
       if (err) throw err;
@@ -22,11 +25,12 @@ app.post('/api/notes', (req, res) => {
     });
     }); 
   });
-  
+
+  // GET request for notes
   app.get('api/notes/:id', (req, res) =>{
     res.json(notes[req.params.id]);
   });
-  
+  // 
   app.get('/api/notes', (req, res) => {
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
       if (err) throw err;
@@ -35,10 +39,12 @@ app.post('/api/notes', (req, res) => {
     });
   });
   
+  // GET route for notes.html
   app.get('/notes', (req, res) => {
       res.sendFile(path.join(__dirname, '/notes.html'))
   });
   
+  // GET route for index.html
   app.get('*', (req, res) => {
      res.sendFile(path.join(__dirname, '/index.html'));
   });   
